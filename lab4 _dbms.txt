@@ -1,0 +1,77 @@
+create schema cus;
+
+
+set search_path to cus;
+
+create table customer(
+	custno int primary key,
+	name varchar(20)
+	);
+
+create table item(
+	code int primary key,
+	name varchar(20),
+	category int,
+	saleprice int,
+	stock int,
+	reorderlevel int,
+	averagepurchaseprice int
+	);
+
+create table sales(
+	invno int primary key,
+	invdate date,
+	customerno int references customer
+	);
+
+create table salesdetails(
+	invno int references sales,
+	itemcode int references item,
+	qty int,
+	rate int,
+	primary key(invno,itemcode)
+	);
+
+
+
+
+insert into customer values(1,'aniket');
+insert into customer values(2,'raj');
+insert into customer values(3,'tara');
+insert into customer values(4,'chan');
+insert into customer values(5,'naresh');
+insert into customer values(6,'mawesi');
+insert into customer values(9,'ganni');
+insert into customer values(7,'ravan');
+insert into customer values(8,'sita');
+
+
+
+
+insert into item values(1,'chips',2,34,56,4,32);
+insert into item values(2,'chips',2,34,56,4,32);
+insert into item values(3,'chips',2,34,56,4,32);
+
+
+
+
+
+
+
+
+Query
+select *from item where stock<reorderlevel;
+
+
+
+select sum(amount) from (select qty*rate as amount from sales natural join salesdetails where invdate='01-05-1999')as r1;
+
+
+
+
+select * from item join(select code,avg(saleprice)as avprice from item group by code)as r1 on code=r1.code where avprice>1.3*averagepurchaseprice
+
+
+
+
+select itemcode,count(invno)as total from salesdetails group by itemcode order by count(invno)

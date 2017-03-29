@@ -1,0 +1,303 @@
+drop schema cab_service;
+create schema cab_service;
+set search_path to cab_service ;
+
+
+
+
+create table discount(
+			dis_id int primary key,
+			dis_amount int not null
+			);
+
+
+
+create table pin_code(
+			pin int primary key,
+			city varchar(50) not null,
+			state varchar(30) not null
+			);
+
+create table department(
+			dno int primary key,
+			dname varchar(50) NOT NULL
+			);
+
+
+
+
+create table branch(
+			branch_id int primary key,
+			branch_name varchar(40),
+			street_no int,
+			phone int,
+			pin int references pin_code(pin)
+			);
+
+
+
+
+create table employee(
+		   eid int primary key,
+		   fname varchar(20),
+		   surname varchar(20),
+		   sex char(1),
+		   salary int,
+		   bid int references branch(branch_id),
+		   dno int references department(dno)
+		   );
+
+
+
+
+create table vehicle(
+		    vid int primary key,
+		    v_name varchar(20),
+		    cost_per_km int,
+		    driver_id int references employee(eid),
+		    availability char(1),
+		    rating int
+		    );
+
+
+
+create table customer(
+			customer_id int primary key,
+			fname varchar(20),
+			surname varchar(20),
+			gender char(1),
+			street_no int,
+			house_no int,
+			age smallint,
+			pin int references pin_code(pin)
+			
+			);
+
+
+create table customer_email(
+			customer_id int references customer(customer_id),
+			email varchar(40),
+			primary key(customer_id,email)
+			);
+
+
+create table customer_phone(
+			customer_id int references customer(customer_id),
+			phone int,
+			primary key(customer_id,phone)
+			);
+
+
+
+create table booking(
+		booking_no int primary key,
+		cid int references customer(customer_id),
+		vid int references vehicle(vid),
+		booking_date date,
+		booking_time time,
+		source_pin int references pin_code(pin),
+		destination_pin int references pin_code(pin)
+
+
+);
+create table bill(bid int primary key,
+		discount_id int references discount(dis_id),
+		total_amount int,
+		customer_id int references customer(customer_id),
+		vid int references vehicle(vid),
+		booking_no int references booking(booking_no)
+
+		);
+
+
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		insert into discount values(1,10);
+insert into discount values(2,20);
+insert into discount values(3,30);
+insert into discount values(4,40);
+insert into discount values(5,50);
+insert into discount values(6,60);
+insert into discount values(7,70);
+insert into discount values(8,100);
+
+
+
+
+
+
+insert into pin_code values(123456,'gandhinagar','gujrat');
+insert into pin_code values(123457,'jaipur','rajasthan');
+insert into pin_code values(123458,'patna','bihar');
+insert into pin_code values(123459,'kanpur','up');
+insert into pin_code values(123460,'udaipur','rajasthan');
+
+
+
+
+insert into department values(1,'driver');
+insert into department values(2,'maintenence');
+insert into department values(3,'accounts');
+
+
+
+
+
+insert into  customer values(101,'vikas','singh','m',201,301,19,123456);
+insert into  customer values(102,'shreya','singh','f',202,302,17,123457);
+insert into  customer values(103,'aradhya','singh','f',203,303,32,123458);
+insert into  customer values(104,'charu','chimpa','f',204,304,29,123456);
+insert into  customer values(105,'lalit','singh','m',205,305,19,123456);
+insert into  customer values(106,'aniket','raj','m',206,306,25,123460);
+insert into  customer values(107,'harish','singh','m',207,307,21,123457);
+insert into  customer values(108,'aditya','raj','m',208,308,24,123458);
+insert into  customer values(109,'sandeep','merutha','m',209,309,22,123459);
+insert into  customer values(110,'akku','singh','m',210,310,18,123456);
+
+
+
+
+insert into customer_email values(101,'201452032@iiitvadodara.ac.in');
+insert into customer_email values(102,'201452033@iiitvadodara.ac.in');
+insert into customer_email values(103,'201452034@iiitvadodara.ac.in');
+insert into customer_email values(104,'201452035@iiitvadodara.ac.in');
+insert into customer_email values(105,'201452036@iiitvadodara.ac.in');
+insert into customer_email values(106,'201452037@iiitvadodara.ac.in');
+insert into customer_email values(107,'201452038@iiitvadodara.ac.in');
+insert into customer_email values(108,'201452039@iiitvadodara.ac.in');
+insert into customer_email values(109,'201452040@iiitvadodara.ac.in');
+insert into customer_email values(110,'201452041@iiitvadodara.ac.in');
+
+
+
+
+
+
+
+
+insert into customer_phone values(101,'201452032');
+insert into customer_phone values(102,'201452033');
+insert into customer_phone values(103,'201452034');
+insert into customer_phone values(104,'201452035');
+insert into customer_phone values(105,'201452036');
+insert into customer_phone values(106,'201452037');
+insert into customer_phone values(107,'201452038');
+insert into customer_phone values(108,'201452039');
+insert into customer_phone values(109,'201452040');
+insert into customer_phone values(110,'201452041');
+
+
+
+
+
+insert into branch values(2001,'A',401,958026,123458);
+insert into branch values(2002,'B',402,958027,123456);
+insert into branch values(2003,'C',403,958028,123457);
+insert into branch values(2004,'D',404,958029,123458);
+insert into branch values(2005,'E',405,958030,123459);
+insert into branch values(2006,'F',406,958031,123460);
+insert into branch values(2007,'G',407,958032,123456);
+
+
+
+insert into employee values(601,'yashwant','chinna','m',7000,2001,1);
+insert into employee values(602,'bhoopendra','singh','m',4000,2002,1);
+insert into employee values(603,'sandeep','singh','m',5000,2005,2);
+insert into employee values(604,'shubham','chinna','m',8000,2006,1);
+insert into employee values(605,'raghav','chinna','m',9000,2005,1);
+insert into employee values(606,'aarush','chinna','m',5000,2004,1);
+insert into employee values(607,'lucky','singh','m',6000,2003,1);
+
+
+insert into employee values(608,'mukesh','chinna','m',5000,2001,2);
+insert into employee values(609,'anil','chinna','m',5000,2001,2);
+insert into employee values(610,'vijay','chinna','m',5000,2001,2);
+insert into employee values(612,'komal','chinna','f',5000,2001,1);
+insert into employee values(613,'megha','chinna','m',5000,2001,1);
+
+
+
+
+
+
+insert into vehicle values(701,'z',10,601,'y',5);
+insert into vehicle values(702,'y',11,602,'n',4);
+insert into vehicle values(703,'x',12,603,'n',5);
+insert into vehicle values(704,'w',7,604,'y',6);
+insert into vehicle values(705,'v',8,605,'n',7);
+insert into vehicle values(706,'s',9,606,'y',8);
+insert into vehicle values(707,'t',6,607,'y',9);
+insert into vehicle values(708,'u',7,612,'n',4);
+insert into vehicle values(709,'r',8,613,'y',6);
+
+insert into vehicle values(710,'z',10,614,'y',5);
+insert into vehicle values(711,'z',10,615,'y',5);
+
+
+
+
+insert into booking values(11,101,703,'2016-12-01','15:25:18.34',123456,123457);
+insert into booking values(12,104,704,'2016-09-03','16:25:18.34',123457,123458);
+insert into booking values(13,105,706,'2016-08-04','17:25:18.34',123459,123456);
+insert into booking values(14,107,707,'2016-06-07','18:25:18.34',123460,123458);
+insert into booking values(15,109,708,'2016-04-12','19:25:18.34',123457,123460);
+insert into booking values(16,102,710,'2016-02-17','20:25:18.34',123460,123456);
+
+
+
+
+
+insert into bill values(51,1,510,101,703,11);
+insert into bill values(52,1,510,104,704,12);
+insert into bill values(53,1,510,105,706,13);
+insert into bill values(54,1,510,107,707,14);
+insert into bill values(55,1,510,109,708,15);
+insert into bill values(56,1,510,102,710,16);
+
+
+
+
+
+
+
+insert into booking values(20,101,703,'2016-01-01','15:25:18.34',123456,123457);
+insert into bill values(60,1,520,101,703,20);
+insert into customer_phone values(101,'201452033');
+
+
+insert into employee values(614,'rekha','chinna','f',5000,2001,1);
+
+insert into employee values(615,'suha','chinna','f',5000,2001,1);
+
+
+
+
+
+
+select * from customer natural join customer_email natural join customer_phone natural join pin_code where customer_id in(select cid from(select cid,count(booking_no) as number from booking group by cid having count(booking_no)>1)as r2);
+
+
+
+
+
